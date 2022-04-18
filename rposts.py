@@ -5,7 +5,7 @@ import discord
 from prawcore.exceptions import NotFound
 import json
 
-with open("config.json", "r") as read_file:
+with open("guilds.json", "r") as read_file:
   data = json.load(read_file)
 
 # Command order r/subreddit posts sort type amount
@@ -95,8 +95,14 @@ async def execute(message):
       continue
     elif "v.redd.it" in post.url:
       continue
+
+    i = 0
+    for id in data["guildids"]:
+      if str(message.guild.id) in id:
+        break
+      i += 1
     
-    if post.over_18 and not data["nsfwposts"]:
+    if post.over_18 and not data["nsfwposts"][i]:
       await message.channel.send("NSFW posts are disabled!")
       messages += 1
       continue
