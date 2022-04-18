@@ -2,6 +2,7 @@ from datetime import datetime
 import time
 from reddit import reddit
 import discord
+import loggin as log
 from prawcore.exceptions import NotFound
 
 # Command order u/user comments sort amount
@@ -61,14 +62,15 @@ async def execute(message):
 
     time_posted = comment.created
 
-    embed.set_author(name = "/r/" + comment.subreddit.display_name, url = "https://www.reddit.com/r/" + comment.subreddit.display_name, icon_url = comment.subreddit.icon_img)
-    embed.set_footer(text = "/u/" + comment.author.name, icon_url = comment.author.icon_img)
+    embed.set_author(name = "r/" + comment.subreddit.display_name, url = "https://www.reddit.com/r/" + comment.subreddit.display_name, icon_url = comment.subreddit.icon_img)
+    embed.set_footer(text = "u/" + comment.author.name, icon_url = comment.author.icon_img)
     embed.timestamp = datetime.fromtimestamp(time_posted)
 
     await message.channel.send(embed = embed)
     time.sleep(1)
     messages += 1
     if messages >= limit:
+      log.cmdlogging(message, "viewed comments from u/" + comment.author.name)
       return
 
 async def help(message): # TODO: fix this

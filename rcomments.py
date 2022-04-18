@@ -3,6 +3,7 @@ import random
 import time
 from reddit import reddit
 import discord
+import loggin as log
 from prawcore.exceptions import NotFound
 
 # Command order r/subreddit comments sort amount
@@ -64,8 +65,8 @@ async def execute(message):
 
       time_posted = submission.comments[i].created
 
-      embed.set_author(name = "/r/" + submission.subreddit.display_name, url = "https://www.reddit.com/r/" + submission.subreddit.display_name, icon_url = submission.subreddit.icon_img)
-      embed.set_footer(text = "/u/" + submission.comments[i].author.name, icon_url = submission.comments[i].author.icon_img)
+      embed.set_author(name = "r/" + submission.subreddit.display_name, url = "https://www.reddit.com/r/" + submission.subreddit.display_name, icon_url = submission.subreddit.icon_img)
+      embed.set_footer(text = "u/" + submission.comments[i].author.name, icon_url = submission.comments[i].author.icon_img)
       embed.timestamp = datetime.fromtimestamp(time_posted)
 
       await message.channel.send(embed = embed)
@@ -73,6 +74,7 @@ async def execute(message):
       messages += 1
       if messages >= limit:
         break
+    log.cmdlogging(message, "view comments from r/" + submission.subreddit.display_name)
     return
 
 async def help(message): # TODO: fix this
