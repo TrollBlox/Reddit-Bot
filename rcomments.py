@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import random
 import time
 from reddit import reddit
@@ -66,7 +66,7 @@ async def execute(message):
 
       embed.set_author(name = "/r/" + submission.subreddit.display_name, url = "https://www.reddit.com/r/" + submission.subreddit.display_name, icon_url = submission.subreddit.icon_img)
       embed.set_footer(text = "/u/" + submission.comments[i].author.name, icon_url = submission.comments[i].author.icon_img)
-      embed.timestamp = datetime.datetime.fromtimestamp(time_posted)
+      embed.timestamp = datetime.fromtimestamp(time_posted)
 
       await message.channel.send(embed = embed)
       time.sleep(1)

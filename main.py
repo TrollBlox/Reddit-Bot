@@ -4,6 +4,7 @@ import ucomments as ucomments
 import uposts as uposts
 import rcomments as rcomments
 import rposts as rposts
+import loggin as log
 from reddit import reddit
 
 with open("config.json", "r") as read_file:
@@ -19,6 +20,11 @@ class MyClient(discord.Client):
   async def on_message(self, message):
     if message.author == client.user:
       return
+
+    if message.content[0:2] == "u/" or message.content[0:2] == "r/":
+      await log.cmdlogging(message)
+    else:
+      await log.messagelogging(message)
 
     if message.content[0:2] == "u/":
       text = message.content.split()
