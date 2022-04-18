@@ -1,21 +1,13 @@
-from multiprocessing.sharedctypes import Value
-import time
-import praw
-from prawcore.exceptions import NotFound
 import json
 import discord
+import ucomments as ucomments
+import uposts as uposts
+import rcomments as rcomments
+import rposts as rposts
+from reddit import reddit
 
 with open("config.json", "r") as read_file:
   data = json.load(read_file)
-
-reddit = praw.Reddit(
-  client_id = data["client_id"],
-  client_secret = data["client_secret"],
-  user_agent = data["user_agent"],
-  username = data["username"],
-  password = data["password"],
-  check_for_async = False,
-)
 
 redditor = reddit.redditor("trollblox_").saved()
 allowed_mentions = discord.AllowedMentions(everyone = True)
@@ -28,30 +20,19 @@ class MyClient(discord.Client):
     if message.author == client.user:
       return
 
-    if message.content[0] == "$":
+    if message.content[0:2] == "u/":
       text = message.content.split()
-      limit = 0
-      if len(text) == 1:
-        limit = 10
-      else:
-        limit = text[1]
-      try:
-        if limit == "all":
-          redditor = reddit.redditor(text[0][1:]).comments.new(limit = None)
-        else: 
-          redditor = reddit.redditor(text[0][1:]).comments.new(limit = int(limit))
-      except NotFound:
-        await message.channel.send("Could not find that user!")
-      except ValueError:
-        await message.channel.send("Not a valid number!")
+      if text[1] == "comments":
+        await ucomments.execute(message)
+      if text[1] == "posts":
+        await uposts.execute(message)
 
-      for comment in redditor:
-        try:
-          # await message.channel.send(content = "@everyone " + comment.body, allowed_mentions = allowed_mentions)
-          await message.channel.send("```\n" + comment.body + "\n```")
-          time.sleep(1)
-        except:
-          await message.channel.send("Something went wrong displaying the comment!")
+    if message.content[0:2] == "r/":
+      text = message.content.split()
+      if text[1] == "comments":
+        await rcomments.execute(message)
+      if text[1] == "posts":
+        await rposts.execute(message)
 
 client = MyClient()
 client.run(data["token"])
