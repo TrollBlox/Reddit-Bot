@@ -53,6 +53,9 @@ async def execute(message):
 
   messages = 0
   for comment in comments:
+    if messages >= limit:
+      await log.cmdlogging(message, "viewed comments from u/" + comment.author.name)
+      return
 
     if len(comment.body) > 4093:
       extra = "..."
@@ -69,9 +72,6 @@ async def execute(message):
     await message.channel.send(embed = embed)
     time.sleep(1)
     messages += 1
-    if messages >= limit:
-      log.cmdlogging(message, "viewed comments from u/" + comment.author.name)
-      return
 
 async def help(message): # TODO: fix this
   await message.channel.send("Format for comments command: u/[user] comments [the way to sort the comments (top, hot, etc.)] [the number of comments. max = 5, default = 1]")

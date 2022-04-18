@@ -54,6 +54,9 @@ async def execute(message):
 
   messages = 0
   for submission in submissions:
+    if messages >= limit:
+      await log.cmdlogging(message, "view comments from r/" + submission.subreddit.display_name)
+      break
     if random.randint(0, 1) == 0:
       continue
     for i in range(limit):
@@ -72,9 +75,6 @@ async def execute(message):
       await message.channel.send(embed = embed)
       time.sleep(1)
       messages += 1
-      if messages >= limit:
-        break
-    log.cmdlogging(message, "view comments from r/" + submission.subreddit.display_name)
     return
 
 async def help(message): # TODO: fix this

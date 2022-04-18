@@ -1,11 +1,9 @@
 import json
 import loggin as log
 
-with open("guilds.json") as read_file:
-  data = json.load(read_file)
-
-
 async def execute(message):
+  with open("guilds.json") as read_file:
+    data = json.load(read_file)
   jsonguildentrynum = 0
   for id in data["guildids"]:
     if str(message.guild.id) in id:
@@ -14,7 +12,7 @@ async def execute(message):
   text = message.content.split()
 
   if len(text) == 1:
-    log.cmdlogging(message, "viewed current nsfw settings in the guild " + message.guild.name)
+    await log.cmdlogging(message, "viewed current nsfw settings in the guild " + message.guild.name)
     if data["nsfwposts"][jsonguildentrynum]:
       await message.channel.send("NSFW posts are enabled!")
       return
@@ -30,16 +28,20 @@ async def execute(message):
     if data["nsfwposts"][jsonguildentrynum] == True:
       await message.channel.send("NSFW posts are already enabled!")
       return
-    data["nsfwposts"][jsonguildentrynum] = True
+    data["nsfwposts"][jsonguildentrynum] = (True)
+    with open("guilds.json", "w") as f:
+      json.dump(data, f)
     await message.channel.send("Enabled NSFW posts!")
-    log.cmdlogging(message, "enabled nsfw posts in the guild " + message.guild.name)
+    await log.cmdlogging(message, "enabled nsfw posts in the guild " + message.guild.name)
   elif text[1] == "disable" or text[1] == "false" or text[1] == "off":
     if data["nsfwposts"][jsonguildentrynum] == False:
       await message.channel.send("NSFW posts are already disabled!")
       return
-    data["nsfwposts"][jsonguildentrynum] = False
+    data["nsfwposts"][jsonguildentrynum] = (False)
+    with open("guilds.json", "w") as f:
+      json.dump(data, f)
     await message.channel.send("Disabled NSFW posts!")
-    log.cmdlogging(message, "disabled nsfw posts in the guild " + message.guild.name)
+    await log.cmdlogging(message, "disabled nsfw posts in the guild " + message.guild.name)
   else:
     await message.channel.send("I don't understand!")
     return

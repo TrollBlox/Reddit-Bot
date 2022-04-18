@@ -6,13 +6,13 @@ import loggin as log
 from prawcore.exceptions import NotFound
 import json
 
-with open("guilds.json", "r") as read_file:
-  data = json.load(read_file)
 
 # Command order u/user posts sort type amount
 #                 0      1     2    3    4
 
 async def execute(message):
+  with open("guilds.json", "r") as read_file:
+    data = json.load(read_file)
   message_content = message.content.split()
 
   if len(message_content) == 1:
@@ -130,7 +130,7 @@ async def execute(message):
     time.sleep(1)
     messages += 1
     if messages >= limit:
-      log.cmdlogging(message, "viewed posts from u/" + post.author.name)
+      await log.cmdlogging(message, "viewed posts from u/" + post.author.name)
       return
 
 async def help(message):

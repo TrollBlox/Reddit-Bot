@@ -6,13 +6,13 @@ import loggin as log
 from prawcore.exceptions import NotFound
 import json
 
-with open("guilds.json", "r") as read_file:
-  data = json.load(read_file)
 
 # Command order r/subreddit posts sort type amount
 #                 0           1     2    3    4
 
 async def execute(message):
+  with open("guilds.json", "r") as read_file:
+    data = json.load(read_file)
   message_content = message.content.split()
 
   if len(message_content) == 1:
@@ -83,6 +83,9 @@ async def execute(message):
 
   messages = 0
   for post in posts:
+    if messages >= limit:
+      await log.cmdlogging(message, "viewed posts from r/" + post.subreddit.display_name)
+      return
     post_is_text = False
     if post.is_self:
       post_is_text = True
@@ -129,9 +132,6 @@ async def execute(message):
     await message.channel.send(embed = embed)
     time.sleep(1)
     messages += 1
-    if messages >= limit:
-      log.cmdlogging(message, "viewed posts from r/" + post.subreddit.display_name)
-      return
 
 async def help(message):
   await message.channel.send("Format for posts command: r/[subreddit] posts [the way to sort the posts (top, hot, etc.)] [the type of comment (image, text, gif, media)] [the number of posts. max = 5, default = 1]")
