@@ -6,7 +6,6 @@ import loggin as log
 from prawcore.exceptions import NotFound
 import json
 
-
 # Command order u/user posts sort type amount
 #                 0      1     2    3    4
 

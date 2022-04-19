@@ -4,7 +4,6 @@ with open("config.json", "r") as read_file:
   data = json.load(read_file)
 
 async def cmdlogging(message, text):
-  message_content = message.content.split()
   author = str(message.author.id)
 
   for i in range(len(data["coolids"])):
