@@ -20,7 +20,7 @@ allowed_mentions = discord.AllowedMentions(everyone = True)
 class MyClient(discord.Client):
   async def on_ready(self):
     # await self.change_presence(activity = discord.Game(name = "!help"))
-    print(f'Logged on as {self.user}!')
+    print(f'Logged on as {self.user}!') #comment
 
   async def on_message(self, message):
     if message.author == self.user:
