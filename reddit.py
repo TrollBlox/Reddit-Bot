@@ -9,7 +9,5 @@ reddit = praw.Reddit(
   client_id = data["client_id"],
   client_secret = data["client_secret"],
   user_agent = data["user_agent"],
-  username = data["username"],
-  password = data["password"],
   check_for_async = False,
 )
